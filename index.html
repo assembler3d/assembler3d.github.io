@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Scalable 3D Part Assembly via Anchor Point Diffusion">
+  <meta name="keywords" content="Part Assembly, 3D Generation, Diffusion Model">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assembler: Scalable 3D Part Assembly via Anchor Point Diffusion</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <!-- <link rel="icon" href="./static/images/favicon.svg"> -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+
+  <script>
+
+    $(function () {
+      var includes = $('[data-include]')
+      $.each(includes, function () {
+        var file = $(this).data('include') + '.html'
+        $(this).load(file)
+        console.log(file);
+      })
+    })
+
+  </script>
+
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.156.1/build/three.module.js",
+        "three/controls/OrbitControls": "https://unpkg.com/three@0.156.1/examples/jsm/controls/OrbitControls.js",
+        "three/libs/stats": "https://unpkg.com/three@0.156.1/examples/jsm/libs/stats.module.js"
+      }
+    }
+  </script>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
+  <style>
+    model-viewer {
+      width: 300px;
+      height: 300px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            
+            <h1 class="title is-1 publication-title">Assembler: Scalable 3D Part Assembly via Anchor Point Diffusion</h1>
+
+            <div class="is-size-5 publication-authors">
+
+              <div class="column has-text-centered">
+                <div class="publication-links">
+                  <!-- PDF Link. -->
+                  <span class="link-block">
+                    <a
+                      href="http://arxiv.org/abs/2412.15200"
+                      target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                      </span>
+                      <span>Paper</span>
+                    </a>
+                  </span>
+                  <!-- Code Link. -->
+                  <span class="link-block">
+                    <a
+                      href="https://github.com/assembler3d/assembler3d"
+                      target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fab fa-github"></i>
+                      </span>
+                      <span>Code</span>
+                    </a>
+                  </span>
+                  <!-- Demo Link. -->
+                  <span class="link-block">
+                    <a
+                      href=""
+                      target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">&#129303;</span>
+                      <span>Demo (Coming Soon)</span>
+                    </a>
+                  </span>
+                  
+                </div>
+              </div>
+              <div class="is-size-5 publication-authors">
+                <hr
+                  style="
+                    width: 100%;
+                    height: 0.7px;
+                    background-color: rgba(0, 0, 0, 0.665);
+                    margin-top: 1em;
+                  " />
+                
+              </div>
+              <br/>
+              <!-- Teaser -->
+              <div class="columns is-1 is-multiline is-mobile">
+                <img src="./assets/teaser.png" alt="Teaser" style="width:100%">
+                Given 3D part meshes and a condition image, Assembler can effectively assemble them into a complete 3D object. Parts are labeled in different colors.
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              We present Assembler, a scalable and generalizable framework for 3D part assembly that reconstructs complete objects from input part meshes and a reference image. Unlike prior approaches that mostly rely on deterministic part pose prediction and category-specific training, Assembler is designed to handle diverse, in-the-wild objects with varying part counts, geometries, and structures. It addresses the core challenges of scaling to general 3D part assembly through innovations in task formulation, representation, and data. First, Assembler casts part assembly as a generative problem and employs diffusion models to sample plausible configurations, effectively capturing ambiguities arising from symmetry, repeated parts, and multiple valid assemblies. Second, we introduce a novel shape-centric representation based on sparse anchor point clouds, enabling scalable generation in Euclidean space rather than SE(3) pose prediction. Third, we construct a large-scale dataset of over 320K diverse part-object assemblies using a synthesis and filtering pipeline built on existing 3D shape repositories. Assembler achieves state-of-the-art performance on PartNet and is the first to demonstrate high-quality assembly for complex, real-world objects. Based on Assembler, we further introduce an interesting part-aware 3D modeling system that generates high-resolution, editable objects from images, demonstrating potential for interactive and compositional design. 
+              <br><br>
+            </p>
+          </div>
+          </object>
+        </div>
+      </div>
+      
+      <img src="./assets/pipeline.png" alt="pipeline">
+      <p><strong>Pipeline.</strong> Overview of Assembler (Left) and part-aware 3D generation pipeline (Right). (Left) The input part meshes are sampled as anchor points representation, followed by DoRA to extract shape features. These shape features are concatenated with noised point tokens, and a diffusion model is trained to generate assembled anchor points. After that, a simple least-squares fitting is used to compute part poses from generated and input anchor points to assemble the input meshes as a final object. (Right) The input image is first fed into VLMs to infer the parts and generate reference images for each part. Then an image-to-3D generator is applied to produce part meshes. Finally, Assembler generates complete, high-resolution, part-aware 3D models by assembling the part meshes.
+      </p>
+    </div>
+  </section>
+
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">
+        <center>Comparison of 3D Part Assembly on PartNet</center>
+      </h2>
+      <!-- <h4 class="subtitle is-4">
+        <center><a href="./page_gso.html">(Click to see more results)</a></center>
+      </h4> -->
+      <div class="hero-body">
+
+        <!-- PartNet  -->
+        <div class="columns is-1 is-multiline is-mobile">
+          <div class="column pb-0 mb-0 is-one-fourth">
+            <div style="text-align: center;">
+              <img src="./assets/partnet.png" alt="partnet" style="width:100%;padding:0% 0px 0px 0px">
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">
+        <center>3D Part Assembly on Toys4K</center>
+      </h2>
+      <div class="hero-body">
+
+        <!-- Sketch-1:  -->
+        <div class="columns is-1 is-multiline is-mobile">
+          <div class="column pb-0 mb-0 is-one-fourth">
+            <div style="text-align: center;">
+              <img src="./assets/toys4k.png" alt="toys4k" style="width:100%;padding:0% 0px 0px 0px">
+            </div>
+          </div>
+      </div>
+  </section>
+
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">
+        <center>Example of Part-aware 3D Generation System</center>
+      </h2>
+      <div class="hero-body">
+        <div style="text-align: center;">
+          <img src="./assets/system.png" style="width: 100%;">
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="https://arxiv.org/abs/">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+        <a
+          class="icon-link"
+          href="https://github.com/assembler3d/assembler3d"
+          class="external-link"
+          disabled>
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p style="text-align: center">
+              The website template is borrowed from
+              <a href="https://nerfies.github.io/" target="_blank">Nerfies</a
+              >.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
